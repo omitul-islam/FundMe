@@ -1,22 +1,23 @@
-import { config as dotenvConfig } from "dotenv"
-// import "@nomiclabs/hardhat-waffle"
-import "hardhat-gas-reporter"
-import "@nomiclabs/hardhat-etherscan"
-import "solidity-coverage"
-import "hardhat-deploy"
+const dotenvConfig = require("dotenv").config;
+require("hardhat-gas-reporter");
+require("@nomiclabs/hardhat-etherscan");
+require("@nomicfoundation/hardhat-ethers");
+require("solidity-coverage");
+require("@nomicfoundation/hardhat-chai-matchers");
+require("hardhat-deploy");
 
-dotenvConfig()
+dotenvConfig();
 
-const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || ""
+const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || "";
 const SEPOLIA_RPC_URL =
     process.env.SEPOLIA_RPC_URL ||
-    "https://sepolia.infura.io/v3/d50ea5ea399e40e0a33dbea45a28aa23"
+    "https://sepolia.infura.io/v3/d50ea5ea399e40e0a33dbea45a28aa23";
 const PRIVATE_KEY =
     process.env.PRIVATE_KEY ||
-    "912a768d032df04a5ca497f8eee9c250bda143a61169aa39d4f53fd906d795e3"
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || ""
+    "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "";
 
-export default {
+module.exports = {
     defaultNetwork: "hardhat",
     networks: {
         hardhat: {
@@ -24,6 +25,8 @@ export default {
         },
         sepolia: {
             url: SEPOLIA_RPC_URL,
+            gasPrice: 5000000000, 
+            gas: 5000000,
             accounts: [PRIVATE_KEY],
             chainId: 11155111,
             blockConfirmations: 6,
@@ -31,9 +34,9 @@ export default {
     },
     solidity: {
         compilers: [
-           {
-            version: "0.8.19",
-           },
+            {
+                version: "0.8.19",
+            },
             {
                 version: "0.8.7",
             },
@@ -60,4 +63,4 @@ export default {
     mocha: {
         timeout: 500000,
     },
-}
+};

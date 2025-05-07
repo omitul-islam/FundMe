@@ -1,9 +1,8 @@
-import { ethers, getNamedAccounts } from "hardhat";
-
+const { ethers, getNamedAccounts } = require("hardhat");
 async function main() {
   const { deployer } = await getNamedAccounts()
-  const fundMe = await ethers.getContract("FundMe", deployer)
-  console.log(`Got contract FundMe at ${fundMe.address}`)
+  const fundMe = await ethers.getContractAt("FundMe", deployer)
+  console.log(`Got contract FundMe at ${fundMe.target}`)
   console.log("Withdrawing from contract...")
   const transactionResponse = await fundMe.withdraw()
   await transactionResponse.wait()

@@ -1,41 +1,28 @@
-import { networkConfig, developmentChains } from "../helper-hardhat-config.js"
-import { verify } from "../utils/verify.js"
-import dotenv from "dotenv"
+const { ethers, network } = require("hardhat");
 
-dotenv.config()
+module.exports = async ({ getNamedAccounts, deployments }) => {
+    const { deploy } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const chainId = network.config.chainId;
 
-/** @type {import('hardhat-deploy/types').DeployFunction} */
-const deployFundMe = async ({ getNamedAccounts, deployments, network }) => {
-    const { deploy, log } = deployments
-    const { deployer } = await getNamedAccounts()
-    const chainId = network.config.chainId
+    let priceFeedAddress;
 
-    let ethUsdPriceFeedAddress
-    if (chainId == 31337) {
-        const ethUsdAggregator = await deployments.get("MockV3Aggregator")
-        ethUsdPriceFeedAddress = ethUsdAggregator.address
+    if (chainId === 31337) {
+        const mockV3Aggregator = await deploy("MockV3Aggregator", {
+            from: deployer,
+            args: [8, 200000000000],
+            log: true,
+        });
+        priceFeedAddress = mockV3Aggregator.address;
     } else {
-        ethUsdPriceFeedAddress = networkConfig[chainId]["ethUsdPriceFeed"]
+        priceFeedAddress = "0x694AA1769357215DE4FAC081bf1f309aDC325306";
     }
 
-    log("----------------------------------------------------")
-    log("Deploying FundMe and waiting for confirmations...")
-    
-    const fundMe = await deploy("FundMe", {
+    await deploy("FundMe", {
         from: deployer,
-        args: [ethUsdPriceFeedAddress],  
+        args: [priceFeedAddress],
         log: true,
-        waitConfirmations: network.config.blockConfirmations || 1,
-    })
-    log(`FundMe deployed at ${fundMe.address}`)
+    });
+};
 
-    if (
-        !developmentChains.includes(network.name) &&
-        process.env.ETHERSCAN_API_KEY
-    ) {
-        await verify(fundMe.address, [ethUsdPriceFeedAddress])
-    }
-}
-
-export default deployFundMe
-deployFundMe.tags = ["all", "fundme"]
+module.exports.tags = ["all", "fundme"]
