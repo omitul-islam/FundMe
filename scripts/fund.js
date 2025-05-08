@@ -3,12 +3,12 @@ const { ethers, getNamedAccounts, deployments } = require("hardhat");
 async function main() {
   const { deployer } = await getNamedAccounts();
    
-  const signers = await ethers.getSigners();
-  const sender = signers[0];
+  // const signers = await ethers.getSigners();
+  // const sender = signers[0];
 
-  console.log("Sender",sender.address);
+  // console.log("Sender",sender.address);
   // Get the deployment details of FundMe contract
-  console.log("deployer",deployer);
+  // console.log("deployer",deployer);
   const fundMeDeployment = await deployments.get("FundMe");
 
   // Fetch the FundMe contract at the deployed address
@@ -19,11 +19,11 @@ async function main() {
   console.log("Funding contract...");
 
   const transactionResponse = await fundMe.fund({
-    value: ethers.parseEther("0.1"), 
+    value: ethers.parseEther("0.05"), 
   });
+ 
 
-
-  await transactionResponse.wait();
+  await transactionResponse.wait(1);
   
   console.log("Funded!");
 }

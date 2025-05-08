@@ -7,7 +7,7 @@ developmentChains.includes(network.name)
     : describe("FundMe", function () {
         let fundMe;
         let deployer;
-        const sendValue = ethers.parseEther("1");
+        const sendValue = ethers.parseEther("0.05");
 
         beforeEach(async function () {
             ({ deployer } = await getNamedAccounts());

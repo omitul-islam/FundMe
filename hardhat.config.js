@@ -8,13 +8,11 @@ require("hardhat-deploy");
 
 dotenvConfig();
 
-const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || "";
 const SEPOLIA_RPC_URL =
     process.env.SEPOLIA_RPC_URL ||
     "https://sepolia.infura.io/v3/d50ea5ea399e40e0a33dbea45a28aa23";
 const PRIVATE_KEY =
-    process.env.PRIVATE_KEY ||
-    "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
+    process.env.PRIVATE_KEY;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "";
 
 module.exports = {
@@ -25,8 +23,8 @@ module.exports = {
         },
         sepolia: {
             url: SEPOLIA_RPC_URL,
-            gasPrice: 5000000000, 
-            gas: 5000000,
+            // gasPrice: 5000000, 
+            // gas: 5000000,
             accounts: [PRIVATE_KEY],
             chainId: 11155111,
             blockConfirmations: 6,
